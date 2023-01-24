@@ -204,6 +204,10 @@ export abstract class ZodType<
     return Promise.resolve(result);
   }
 
+  test(data: unknown): data is Input {
+    return this.safeParse(data).success;
+  }
+
   parse(data: unknown, params?: Partial<ParseParams>): Output {
     const result = this.safeParse(data, params);
     if (result.success) return result.data;
@@ -898,7 +902,7 @@ export class ZodString extends ZodType<string, ZodStringDef> {
 }
 
 export declare class ZodCoercedString extends ZodString {
-  readonly _input: any
+  readonly _input: any;
 }
 
 /////////////////////////////////////////
@@ -1186,7 +1190,7 @@ export class ZodNumber extends ZodType<number, ZodNumberDef> {
 }
 
 export declare class ZodCoercedNumber extends ZodNumber {
-  readonly _input: any
+  readonly _input: any;
 }
 
 /////////////////////////////////////////
@@ -1231,7 +1235,9 @@ export class ZodBigInt extends ZodType<bigint, ZodBigIntDef> {
   };
 }
 
-export interface ZodCoercedBigInt extends Omit<ZodBigInt, keyof ZodType>, ZodType<bigint, ZodBigIntDef, string | number | bigint | boolean> {}
+export interface ZodCoercedBigInt
+  extends Omit<ZodBigInt, keyof ZodType>,
+    ZodType<bigint, ZodBigIntDef, string | number | bigint | boolean> {}
 
 //////////////////////////////////////////
 //////////////////////////////////////////
@@ -1276,7 +1282,7 @@ export class ZodBoolean extends ZodType<boolean, ZodBooleanDef> {
 }
 
 export declare class ZodCoercedBoolean extends ZodBoolean {
-  readonly _input: any
+  readonly _input: any;
 }
 
 ///////////////////////////////////////
@@ -1418,7 +1424,9 @@ export class ZodDate extends ZodType<Date, ZodDateDef> {
   };
 }
 
-export interface ZodCoercedDate extends Omit<ZodDate, keyof ZodType>, ZodType<Date, ZodDateDef, string | number | Date> {}
+export interface ZodCoercedDate
+  extends Omit<ZodDate, keyof ZodType>,
+    ZodType<Date, ZodDateDef, string | number | Date> {}
 
 ////////////////////////////////////////////
 ////////////////////////////////////////////
@@ -4453,16 +4461,16 @@ const onumber = () => numberType().optional();
 const oboolean = () => booleanType().optional();
 
 export const coerce = {
-  string: ((params?: RawCreateParams)  =>
-    ZodString.create({ ...params, coerce: true }) as ZodCoercedString),
-  number: ((params?: RawCreateParams)  =>
-    ZodNumber.create({ ...params, coerce: true }) as ZodCoercedNumber),
-  boolean: ((params?: RawCreateParams)  =>
-    ZodBoolean.create({ ...params, coerce: true }) as ZodCoercedBoolean),
-  bigint: ((params?: RawCreateParams)  =>
-    ZodBigInt.create({ ...params, coerce: true }) as ZodCoercedBigInt),
-  date: ((params?: RawCreateParams)  =>
-    ZodDate.create({ ...params, coerce: true }) as ZodCoercedDate),
+  string: (params?: RawCreateParams) =>
+    ZodString.create({ ...params, coerce: true }) as ZodCoercedString,
+  number: (params?: RawCreateParams) =>
+    ZodNumber.create({ ...params, coerce: true }) as ZodCoercedNumber,
+  boolean: (params?: RawCreateParams) =>
+    ZodBoolean.create({ ...params, coerce: true }) as ZodCoercedBoolean,
+  bigint: (params?: RawCreateParams) =>
+    ZodBigInt.create({ ...params, coerce: true }) as ZodCoercedBigInt,
+  date: (params?: RawCreateParams) =>
+    ZodDate.create({ ...params, coerce: true }) as ZodCoercedDate,
 };
 
 export {
